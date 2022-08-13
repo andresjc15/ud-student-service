@@ -1,8 +1,8 @@
 spring:
   application:
-    name: u-student-service
+    name: ud-student-service
   datasource:
-    url: jdbc:mysql://localhost:3306/eleap_db?serverTimeZone=America/Lima
+    url: jdbc:mysql://localhost:3306/ud-eleap_db?serverTimeZone=America/Lima
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
