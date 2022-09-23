@@ -5,9 +5,13 @@ import com.ajcp.student.repository.StudentRepository;
 import com.ajcp.student.service.StudentService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +28,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<Student> findAll(Pageable pageable) {
+        return studentRepository.findAll(pageable);
+    }
+
+    @Override
     public Optional<Student> findById(Long id) {
         return studentRepository.findById(id);
     }
@@ -34,10 +44,36 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student save(Student student, MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            student.setProfilePicture(file.getBytes());
+        }
+        return studentRepository.save(student);
+    }
+
+    @Override
     public Student update(Student student) {
-        return studentRepository.findById(student.getId()).map(s -> {
-            s.setName(student.getName());
-            return studentRepository.save(s);
+        return studentRepository.findById(student.getId()).map(st -> {
+            st.setName(student.getName());
+            st.setLastName(student.getLastName());
+            st.setEmail(student.getEmail());
+            return studentRepository.save(st);
+        }).orElse(null);
+    }
+
+    @Override
+    public Student updateWithPicture(Student student, MultipartFile file) throws IOException {
+        return studentRepository.findById(student.getId()).map(st -> {
+            st.setName(student.getName());
+            st.setLastName(student.getLastName());
+            st.setEmail(student.getEmail());
+
+            try {
+                st.setProfilePicture(file.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return studentRepository.save(st);
         }).orElse(null);
     }
 

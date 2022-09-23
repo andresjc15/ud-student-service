@@ -2,18 +2,18 @@ spring:
   application:
     name: ud-student-service
   datasource:
-    url: jdbc:mysql://localhost:3306/ud-eleap_db?serverTimeZone=America/Lima
+    url: jdbc:mysql://localhost:3306/ud_eleap_db?serverTimeZone=America/Lima
     username: root
-    password: root
+    password: ispv
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    generate-ddl: false
-    #hibernate:
-    #  ddl-auto: create
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
 
 server:
-  port: 7001
+  port: 7002
 
 eureka:
   instance:
