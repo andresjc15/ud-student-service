@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ajcp.student</groupId>
-	<artifactId>u-student-service</artifactId>
+	<artifactId>u-students-service</artifactId>
 	<version>1.0.0</version>
 	<name>u-student-service</name>
 	<description>Spring boot project</description>
