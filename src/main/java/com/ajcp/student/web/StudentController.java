@@ -3,8 +3,6 @@ package com.ajcp.student.web;
 import com.ajcp.student.entity.Student;
 import com.ajcp.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +16,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,16 +42,9 @@ public class StudentController {
 
     @GetMapping("/uploads/img/{id}")
     public ResponseEntity<?> watchPicture(@PathVariable Long id) {
-
-        Optional<Student> o = studentService.findById(id);
-
-        if (o.isEmpty() || o.get().getProfilePicture() == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Resource image = new ByteArrayResource(o.get().getProfilePicture());
-
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+        return studentService.getProfilePicture(id)
+                .map(resource -> ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

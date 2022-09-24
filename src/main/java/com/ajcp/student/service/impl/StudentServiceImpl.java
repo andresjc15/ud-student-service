@@ -5,6 +5,8 @@ import com.ajcp.student.repository.StudentRepository;
 import com.ajcp.student.service.StudentService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Optional<Student> findById(Long id) {
         return studentRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Resource> getProfilePicture(Long id) {
+        Optional<Student> o = studentRepository.findById(id);
+
+        if (o.isEmpty() || o.get().getProfilePicture() == null) return Optional.empty();
+
+        Resource image = new ByteArrayResource(o.get().getProfilePicture());
+        return Optional.of(image);
     }
 
     @Override
